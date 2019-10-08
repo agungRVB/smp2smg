@@ -140,7 +140,7 @@
                   </span>
                   <div class="col-sm-5" style="padding: 0px 0px 0px 35px;">
                     <select  name="mapel" aria-hidden="true" tabindex="-1" class="form-control select2 select2-hidden-accessible" style="width: 100%;">
-                      <option value="<?php echo $datamapel ?>"></option>
+                      <option value="<?php echo $datamapel ?>"><?php echo $datamapel ?></option>
                       <option>Matematika</option>
                       <option>Pengetahuan Alam</option>
                       <option>Bahasa Inggris</option>
@@ -152,7 +152,7 @@
 
               <div class="form-group" style="margin-right:107px;">
                   <label for="exampleInputFile" class="col-sm-2 control-label">File input</label>
-                  <input type="file" name="bukti" id="exampleInputFile" style="padding: 0px 0px 0px 40px;">
+                  <input type="file" name="gambar" id="exampleInputFile" style="padding: 0px 0px 0px 40px;">
 
                   <p class="help-block" style="padding: 0px 0px 0px 213px;">Upload Bukti Transfer Anda</p>
               </div>
@@ -168,7 +168,45 @@
       </div>    
     </div>
   </div>
+        <?php
+  if (isset($_POST['save'])){
+    include "config/koneksi.php";
+    $nama   = $_POST['nama'];
+    $kls    = $_POST['kelas'];
+    $sklh   = $_POST['sekolah'];
+    $mapel  = $_POST['mapel'];
+            
+// $keterangan   = $_POST['keterangan'];
+// $harga        = $_POST['harga'];
+// $gambar       = $_POST['gambar'];
+    $tipe_file=$_FILES['gambar']['type'];
+    $lokasifile=$_FILES['gambar']['tmp_name'];
+    $namafile=$_FILES['gambar']['name'];
+    $ukurangambar=$_FILES['gambar']['size'];
+                    
 
+ $acak=rand(0000,9999);
+ $namaupload=$acak.$namafile;
+ $direktori="bukti/$namaupload";
+ move_uploaded_file($lokasifile,"$direktori");
+
+    $sql="UPDATE tbl_daftar SET nama = '$nama', kelas = '$kls', sekolah = '$sklh', mapel = '$mapel', bukti = '$direktori'
+    WHERE kode_user = '$dataKU'";
+    $result = mysqli_query($connect, $sql);
+
+    
+    if($result){
+    echo"<script>
+     window.alert('Selamat!!! Anda berhasil mendaftar');
+     </script>";
+     ?>
+ <script>window.location.replace("hasil_daftar.php");</script><?php
+    } else{
+    echo"<script>
+    window.alert('Gagal');
+    </script>";
+  }}
+        ?>
   <!-- /.content-wrapper -->
   <footer class="main-footer">
     <div class="container">
